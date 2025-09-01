@@ -3,35 +3,28 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 
 export default function App() {
-  const [valor1, setValor1] = useState('');
-  const [valor2, setValor2] = useState('');
+  const [input, setInput] = useState('');
   const [resultado, setResultado] = useState(null);
 
-  const calcular = (operacao) => {
-    const num1 = parseFloat(valor1);
-    const num2 = parseFloat(valor2);
-    if (isNaN(num1) || isNaN(num2)) {
-      setResultado('Valores inválidos');
-      return;
+  const handlePress = (value) => {
+    setInput((prev) => prev + value);
+  };
+
+  const handleClear = () => {
+    setInput('');
+    setResultado(null);
+  };
+
+  const handleResult = () => {
+    try {
+      // Substitui x por * para multiplicação
+      const expressao = input.replace(/x/g, '*');
+      // eslint-disable-next-line no-eval
+      const res = eval(expressao);
+      setResultado(res);
+    } catch (e) {
+      setResultado('Erro');
     }
-    let res = 0;
-    switch (operacao) {
-      case '+':
-        res = num1 + num2;
-        break;
-      case '-':
-        res = num1 - num2;
-        break;
-      case 'x':
-        res = num1 * num2;
-        break;
-      case '/':
-        res = num2 !== 0 ? num1 / num2 : 'Divisão por zero';
-        break;
-      default:
-        res = 'Operação inválida';
-    }
-    setResultado(res);
   };
 
   return (
@@ -39,31 +32,37 @@ export default function App() {
       <Text style={styles.title}>Calculadora</Text>
       <TextInput
         style={styles.input}
-        placeholder="Digite o primeiro valor"
+        placeholder="Digite a expressão"
         keyboardType="numeric"
-        value={valor1}
-        onChangeText={setValor1}
+        value={input}
+        onChangeText={setInput}
+        editable={false}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Digite o segundo valor"
-        keyboardType="numeric"
-        value={valor2}
-        onChangeText={setValor2}
-      />
-      <View style={styles.buttonRow}>
-        <TouchableOpacity style={styles.button} onPress={() => calcular('+')}>
-          <Text style={styles.buttonText}>+</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => calcular('-')}>
-          <Text style={styles.buttonText}>-</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => calcular('x')}>
-          <Text style={styles.buttonText}>x</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => calcular('/')}>
-          <Text style={styles.buttonText}>/</Text>
-        </TouchableOpacity>
+      <View style={styles.numpad}>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity style={styles.button} onPress={() => handlePress('7')}><Text style={styles.buttonText}>7</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => handlePress('8')}><Text style={styles.buttonText}>8</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => handlePress('9')}><Text style={styles.buttonText}>9</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => handlePress('/')}><Text style={styles.buttonText}>/</Text></TouchableOpacity>
+        </View>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity style={styles.button} onPress={() => handlePress('4')}><Text style={styles.buttonText}>4</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => handlePress('5')}><Text style={styles.buttonText}>5</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => handlePress('6')}><Text style={styles.buttonText}>6</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => handlePress('x')}><Text style={styles.buttonText}>x</Text></TouchableOpacity>
+        </View>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity style={styles.button} onPress={() => handlePress('1')}><Text style={styles.buttonText}>1</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => handlePress('2')}><Text style={styles.buttonText}>2</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => handlePress('3')}><Text style={styles.buttonText}>3</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => handlePress('-')}><Text style={styles.buttonText}>-</Text></TouchableOpacity>
+        </View>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity style={styles.button} onPress={handleClear}><Text style={styles.buttonText}>C</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => handlePress('0')}><Text style={styles.buttonText}>0</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handleResult}><Text style={styles.buttonText}>=</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => handlePress('+')}><Text style={styles.buttonText}>+</Text></TouchableOpacity>
+        </View>
       </View>
       <Text style={styles.resultado}>
         {resultado !== null ? `Resultado: ${resultado}` : ''}
@@ -96,11 +95,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
   },
+  numpad: {
+    width: '80%',
+    marginBottom: 20,
+  },
   buttonRow: {
     flexDirection: 'row',
-    marginBottom: 20,
+    marginBottom: 10,
     justifyContent: 'space-between',
-    width: '80%',
   },
   button: {
     backgroundColor: '#2fb806ff',
