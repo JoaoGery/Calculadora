@@ -6,8 +6,39 @@ export default function App() {
   const [input, setInput] = useState('');
   const [resultado, setResultado] = useState(null);
 
-  const handlePress = (value) => {
+  const handlePressNumero = (value) => {
     setInput((prev) => prev + value);
+  };
+
+  const handlePressSoma = () => {
+    setInput((prev) => prev + '+');
+  };
+
+  const handlePressSubtracao = () => {
+    setInput((prev) => prev + '-');
+  };
+
+  const handlePressMultiplicacao = () => {
+    setInput((prev) => prev + 'x');
+  };
+
+  const handlePressDivisao = () => {
+    setInput((prev) => prev + '/');
+  };
+
+  const handlePressIgual = () => {
+    try {
+      const expressao = input.replace(/x/g, '*');
+      const res = eval(expressao);
+      setResultado(res);
+    } catch (e) {
+      setResultado('Erro');
+    }
+  };
+
+  const handlePressClear = () => {
+    setInput('');
+    setResultado(null);
   };
 
   const handleClear = () => {
@@ -17,9 +48,9 @@ export default function App() {
 
   const handleResult = () => {
     try {
-      // Substitui x por * para multiplicação
+      
       const expressao = input.replace(/x/g, '*');
-      // eslint-disable-next-line no-eval
+      
       const res = eval(expressao);
       setResultado(res);
     } catch (e) {
@@ -40,28 +71,28 @@ export default function App() {
       />
       <View style={styles.numpad}>
         <View style={styles.buttonRow}>
-          <TouchableOpacity style={styles.button} onPress={() => handlePress('7')}><Text style={styles.buttonText}>7</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => handlePress('8')}><Text style={styles.buttonText}>8</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => handlePress('9')}><Text style={styles.buttonText}>9</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => handlePress('/')}><Text style={styles.buttonText}>/</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => handlePressNumero('7')}><Text style={styles.buttonText}>7</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => handlePressNumero('8')}><Text style={styles.buttonText}>8</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => handlePressNumero('9')}><Text style={styles.buttonText}>9</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handlePressDivisao}><Text style={styles.buttonText}>/</Text></TouchableOpacity>
         </View>
         <View style={styles.buttonRow}>
-          <TouchableOpacity style={styles.button} onPress={() => handlePress('4')}><Text style={styles.buttonText}>4</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => handlePress('5')}><Text style={styles.buttonText}>5</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => handlePress('6')}><Text style={styles.buttonText}>6</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => handlePress('x')}><Text style={styles.buttonText}>x</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => handlePressNumero('4')}><Text style={styles.buttonText}>4</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => handlePressNumero('5')}><Text style={styles.buttonText}>5</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => handlePressNumero('6')}><Text style={styles.buttonText}>6</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handlePressMultiplicacao}><Text style={styles.buttonText}>x</Text></TouchableOpacity>
         </View>
         <View style={styles.buttonRow}>
-          <TouchableOpacity style={styles.button} onPress={() => handlePress('1')}><Text style={styles.buttonText}>1</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => handlePress('2')}><Text style={styles.buttonText}>2</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => handlePress('3')}><Text style={styles.buttonText}>3</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => handlePress('-')}><Text style={styles.buttonText}>-</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => handlePressNumero('1')}><Text style={styles.buttonText}>1</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => handlePressNumero('2')}><Text style={styles.buttonText}>2</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => handlePressNumero('3')}><Text style={styles.buttonText}>3</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handlePressSubtracao}><Text style={styles.buttonText}>-</Text></TouchableOpacity>
         </View>
         <View style={styles.buttonRow}>
-          <TouchableOpacity style={styles.button} onPress={handleClear}><Text style={styles.buttonText}>C</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => handlePress('0')}><Text style={styles.buttonText}>0</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={handleResult}><Text style={styles.buttonText}>=</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => handlePress('+')}><Text style={styles.buttonText}>+</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handlePressClear}><Text style={styles.buttonText}>C</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => handlePressNumero('0')}><Text style={styles.buttonText}>0</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handlePressIgual}><Text style={styles.buttonText}>=</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handlePressSoma}><Text style={styles.buttonText}>+</Text></TouchableOpacity>
         </View>
       </View>
       <Text style={styles.resultado}>
